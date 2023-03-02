@@ -35,15 +35,15 @@ table tbody td {
   text-align: center;
 }
 
-table tbody td.small {
+table th.small {
   min-width: 2rem;
 }
 
-table tbody td.med {
+table th.med {
   min-width: 8rem;
 }
 
-table tbody td.big {
+table th.big {
   min-width: 12rem;
 }
 

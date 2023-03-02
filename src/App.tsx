@@ -1,14 +1,68 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
-import Tanstack from "./components/Tanstack";
-import Table from "./components/Raw";
+import useDynamicTable from "./components/Raw";
+import { TableButtonType } from "./tableTypes";
+
+import {
+  TEST_ORDERS,
+  TEST_INVENTORIES,
+  TEST_SLOTS,
+  TEST_UNITS,
+  TEST_CUSTOMERS,
+} from "./testData";
 
 function App() {
+  const [buttons, setButtons] = useState<TableButtonType[]>([]);
+  const [selectedTable, setSelectedTable] = useState<
+    | typeof TEST_INVENTORIES
+    | typeof TEST_SLOTS
+    | typeof TEST_UNITS
+    | typeof TEST_ORDERS
+    | typeof TEST_CUSTOMERS
+  >(TEST_SLOTS);
+  const TEMP_BUTTON: TableButtonType = {
+    text: "Hello",
+    click: (e: any, data: any) => {
+      console.log(data);
+    },
+    classes: "Hello",
+  };
+  const rowOnClick = <T,>(data: T): void => {
+    console.log("ROW:>", data);
+  };
+  const { Table } = useDynamicTable({
+    data: selectedTable.data,
+    headers: selectedTable.headers,
+    rowOnClick,
+    buttons,
+  });
   return (
     <div className="App">
-      {/* <Tanstack /> */}
-      <Table />
+      {Table}
+      <button
+        type="button"
+        onClick={() => setButtons((t) => (t.length ? [] : [TEMP_BUTTON]))}
+      >
+        Toggle Buttons
+      </button>
+      <button type="button" onClick={() => setSelectedTable({ ...TEST_SLOTS })}>
+        Slots
+      </button>
+      <button
+        type="button"
+        onClick={() => setSelectedTable({ ...TEST_ORDERS })}
+      >
+        Order
+      </button>
+      <button
+        type="button"
+        onClick={() => setSelectedTable({ ...TEST_INVENTORIES })}
+      >
+        Inventory
+      </button>
+      <button type="button" onClick={() => setSelectedTable({ ...TEST_UNITS })}>
+        Unit
+      </button>
     </div>
   );
 }

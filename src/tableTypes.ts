@@ -1,6 +1,4 @@
 type ButtonHeaderType = {
-  title: string;
-  key: string;
   type: "button";
   clickFunction: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -9,8 +7,6 @@ type ButtonHeaderType = {
 };
 
 type InputHeaderType = {
-  title: string;
-  key: string;
   type: "input";
   inputType:
     | "checkbox"
@@ -31,8 +27,6 @@ type InputHeaderType = {
 };
 
 type SelectHeaderType = {
-  title: string;
-  key: string;
   type: "select";
   selectOptions: { text: string; value: string | number }[];
   defaultCheck?: "text" | "value";
@@ -43,18 +37,29 @@ type SelectHeaderType = {
 };
 
 type BasicHeaderType = {
-  title: string;
-  key: string;
   type: "image" | "text";
 };
 
-export type TableHeaderType =
+export type TableHeaderType = (
   | BasicHeaderType
   | InputHeaderType
   | ButtonHeaderType
-  | SelectHeaderType;
+  | SelectHeaderType
+) & {
+  title: string;
+  key: string;
+  classes?: string;
+};
 
 export type TableButtonType = {
   click: (e: React.MouseEvent<HTMLButtonElement>, data: unknown) => void;
   text: string;
+  classes?: string;
+};
+export type tableConfigType = {
+  data: object[];
+  classes?: string;
+  rowOnClick?: <T>(data: T) => void;
+  headers?: TableHeaderType[];
+  buttons?: TableButtonType[];
 };

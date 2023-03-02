@@ -266,6 +266,7 @@ const INVENTORIES_HEADERS: TableHeaderType[] = [
     title: "status",
     key: "status",
     type: "button",
+    classes: "Hello",
     clickFunction: clickFunction,
   },
   {
@@ -635,7 +636,16 @@ const SLOTS_DATA = [
     order_limit: 360,
   },
 ];
-export const TEST_SLOTS = { data: SLOTS_DATA };
+export const TEST_SLOTS: {
+  data: typeof SLOTS_DATA;
+  headers: TableHeaderType[];
+} = {
+  data: SLOTS_DATA,
+  headers: [
+    { type: "text", key: "from", title: "from", classes: "small" },
+    { type: "text", key: "to", title: "to", classes: "med" },
+  ],
+};
 
 const UNITS_DATA = [
   {
@@ -671,7 +681,10 @@ const UNITS_DATA = [
     units_hindi: "ग्राम",
   },
 ];
-export const TEST_UNITS = { data: UNITS_DATA };
+export const TEST_UNITS: {
+  data: typeof UNITS_DATA;
+  headers: TableHeaderType[];
+} = { data: UNITS_DATA, headers: [] };
 
 const ORDERS_DATA = [
   {
@@ -875,7 +888,10 @@ const ORDERS_DATA = [
     date: "2022-06-19 22:34:07",
   },
 ];
-export const TEST_ORDERS = { data: ORDERS_DATA };
+export const TEST_ORDERS: {
+  data: typeof ORDERS_DATA;
+  headers: TableHeaderType[];
+} = { data: ORDERS_DATA, headers: [] };
 
 function clickFunction(
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
