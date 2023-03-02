@@ -228,6 +228,27 @@ const makeButton = <T,>(btn: TableButtonType, row: T): ReactNode => (
   </button>
 );
 
+/**
+ *@summary This hook takes the configuration object and makes a dynamic table in accordance 
+  with the configuration, and the data provided.
+
+ *@description Table can have any number of rows and columns.
+
+ * Table can also have buttons, inputs, selects and images as a cell element.
+
+ * Table elements are used from the 'Table.tsx' file.
+
+ * @param {object} tableConfig Configuration object for the table:
+ * @field data: object[](data for the rows of table),
+ * @field classes?: string(classes for the table),
+ * @field rowOnClick?: function(even for the row click),
+ * @field headers?: TableHeaderType[](headers for the table),
+ * @field buttons?: TableButtonType[](buttons for the table)
+ * @returns {object}:
+ * @field Table: JSX.Element(DynamicTable),
+ * @field Rows: ReactNode[](row elements of table),
+ * @field Columns: ReactNode[](header elements of table)
+ */
 const useDynamicTable = ({
   data,
   headers = [],
@@ -244,19 +265,19 @@ const useDynamicTable = ({
     [headers, data, buttons]
   );
 
-  const COLUMNS = useMemo<ReactNode[]>(() => makeColumns(headers), [headers]);
+  const Columns = useMemo<ReactNode[]>(() => makeColumns(headers), [headers]);
 
   const DynamicTable = useMemo(
     () => (
       <Table classes={classes}>
-        <TableHead>{COLUMNS}</TableHead>
+        <TableHead>{Columns}</TableHead>
         {Rows}
       </Table>
     ),
     [Rows]
   );
 
-  return { Table: DynamicTable, Rows, headers };
+  return { Table: DynamicTable, Rows, Columns };
 };
 
 export default useDynamicTable;
