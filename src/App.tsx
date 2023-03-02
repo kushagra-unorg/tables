@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import useDynamicTable from "./components/Raw";
+import useDynamicTable from "./components/UseDynamicTable";
 import { TableButtonType } from "./tableTypes";
 
 import {
