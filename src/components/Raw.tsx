@@ -5,6 +5,17 @@ import {
   tableConfigType,
 } from "../tableTypes";
 import { Table, TableHead, TableHeader, TableRow } from "./Table";
+import {
+  CheckboxInput,
+  DateInput,
+  EmailInput,
+  FileInput,
+  InputTypes,
+  NumberInput,
+  RadioInput,
+  TelInput,
+  TextInput,
+} from "./Form";
 
 /**
  * Function to make headers from the data object.
@@ -19,6 +30,95 @@ const makeHeaders = (data: object): TableHeaderType[] => {
     key: key,
   }));
   return headers;
+};
+
+const getInput = <T,>(
+  type: InputTypes,
+  func: (e: React.ChangeEvent<HTMLInputElement>, d: unknown) => void,
+  defaultValue: string | undefined,
+  row: T
+): JSX.Element => {
+  switch (type) {
+    case "checkbox":
+      return (
+        <CheckboxInput
+          defaultValue={defaultValue}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "radio":
+      return (
+        <RadioInput
+          defaultValue={defaultValue}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "text":
+    case "password":
+      return (
+        <TextInput
+          defaultValue={defaultValue}
+          type={type}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "checkbox":
+      return (
+        <TelInput
+          defaultValue={defaultValue}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "datetime-local":
+    case "date":
+    case "time":
+      return (
+        <DateInput
+          defaultValue={defaultValue}
+          type={type}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "file":
+      return (
+        <FileInput
+          defaultValue={defaultValue}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "number":
+      return (
+        <NumberInput
+          defaultValue={defaultValue}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    case "email":
+      return (
+        <EmailInput
+          defaultValue={defaultValue}
+          onChange={(e) => func(e, row)}
+          id=""
+          name=""
+        />
+      );
+    default:
+      return <>Wrong Input Type Given</>;
+  }
 };
 
 /**
@@ -43,12 +143,11 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
           </button>
         );
       case "input":
-        return (
-          <input
-            type={header.inputType}
-            onChange={(e) => header.changeFunction(e, row)}
-            placeholder={elm?.toString()}
-          />
+        return getInput<T>(
+          header.inputType,
+          header.changeFunction,
+          elm?.toString(),
+          row
         );
       case "select":
         return (

@@ -10,9 +10,12 @@ import {
   TEST_UNITS,
   TEST_CUSTOMERS,
 } from "./testData";
+import { TextInput } from "./components/Form";
+import { ChangeEvent } from "./components/types/events";
 
 function App() {
   const [buttons, setButtons] = useState<TableButtonType[]>([]);
+  const [val, setVal] = useState("HE");
   const [selectedTable, setSelectedTable] = useState<
     | typeof TEST_INVENTORIES
     | typeof TEST_SLOTS
@@ -63,6 +66,14 @@ function App() {
       <button type="button" onClick={() => setSelectedTable({ ...TEST_UNITS })}>
         Unit
       </button>
+      <TextInput
+        id="1"
+        name="1"
+        type="text"
+        placeholder="HEY"
+        value={val}
+        onChange={(e: ChangeEvent) => setVal(e.target.value)}
+      />
     </div>
   );
 }

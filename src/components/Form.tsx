@@ -81,8 +81,8 @@ export function EmailInput(inputProps: EmailInputPropsType) {
 
 type DateInputPropsType = {
   type: "date" | "datetime-local" | "time";
-  min: string;
-  max: string;
+  min?: string;
+  max?: string;
 } & BaseInputType;
 
 export function DateInput(dateInputProps: DateInputPropsType) {

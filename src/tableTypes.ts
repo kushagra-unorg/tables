@@ -1,3 +1,5 @@
+import { InputTypes } from "./components/Form";
+
 type ButtonHeaderType = {
   type: "button";
   clickFunction: (
@@ -8,18 +10,7 @@ type ButtonHeaderType = {
 
 type InputHeaderType = {
   type: "input";
-  inputType:
-    | "checkbox"
-    | "color"
-    | "date"
-    | "datetime-local"
-    | "file"
-    | "image"
-    | "password"
-    | "tel"
-    | "text"
-    | "time"
-    | "number";
+  inputType: InputTypes;
   changeFunction: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     d: unknown
