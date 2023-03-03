@@ -1,37 +1,75 @@
+import { ReactNode } from "react";
 import { ClickEventType } from "./types/events";
+import { ColorsType } from "./types/types";
+import { AddIcon, EditIcon, RemoveIcon } from "./Icons";
 
 type ButtonBasePropType = {
-  children: React.ReactNode;
+  children: ReactNode;
   classes: string;
   isDisabled: boolean;
   clickEvent:
     | ((e: ClickEventType<HTMLButtonElement>, o?: unknown) => void)
     | Function;
   type?: "button" | "reset" | "submit";
+  backgroundColor?: ColorsType;
+  fontColor?: ColorsType;
+  side?: "left" | "right";
 };
 
-const DEFAULT_BUTTON_PROPS = {
+const DEFAULT_BUTTON_PROPS: Partial<ButtonBasePropType> = {
   type: "button",
   isDisabled: false,
   classes: "",
+  fontColor: "white",
+  backgroundColor: "dark-purple",
 };
 
+function BaseButton({
+  children,
+  Icon = undefined,
+  side = "left",
+}: {
+  children: ReactNode;
+  Icon?: ReactNode;
+  side?: "left" | "right";
+}) {
+  if (!Icon) return <>{children}</>;
+  switch (side) {
+    case "left":
+      return (
+        <>
+          {Icon}
+          {children}
+        </>
+      );
+    case "right":
+      return (
+        <>
+          {children}
+          {Icon}
+        </>
+      );
+  }
+}
+
 /* eslint-disable react/button-has-type */
-function Button({
+export function Button({
   children,
   classes,
   isDisabled,
   clickEvent,
   type,
+  fontColor,
+  backgroundColor,
 }: ButtonBasePropType) {
   return (
     <button
       disabled={isDisabled}
-      className={`${classes}`}
+      className={`${classes} text-${fontColor} bg-${backgroundColor}`}
       type={type}
       onClick={(e) => clickEvent(e)}
     >
-      {children}
+      <BaseButton children={children} />
     </button>
   );
 }
@@ -44,64 +82,23 @@ export function AddButton({
   isDisabled,
   clickEvent,
   type,
+  fontColor,
+  backgroundColor,
+  side = "left",
 }: ButtonBasePropType) {
   return (
     <button
       disabled={isDisabled}
-      className={`${classes} add-btn`}
+      className={`add-btn ${classes} text-${fontColor} bg-${backgroundColor}`}
       type={type}
       onClick={(e) => clickEvent(e)}
     >
-      {children}
+      <BaseButton side={side} Icon={<AddIcon />} children={children} />
     </button>
   );
 }
 
 AddButton.defaultProps = { ...DEFAULT_BUTTON_PROPS };
-
-export function AddButtonCircle({
-  children,
-  classes,
-  isDisabled,
-  clickEvent,
-  type,
-}: ButtonBasePropType) {
-  return (
-    <button
-      disabled={isDisabled}
-      className={`${classes} add-btn add-btn-circle`}
-      type={type}
-      onClick={(e) => clickEvent(e)}
-    >
-      {children}
-      {/* <AddCircle /> */}
-    </button>
-  );
-}
-
-AddButtonCircle.defaultProps = { ...DEFAULT_BUTTON_PROPS };
-
-export function BackButton({
-  children,
-  classes,
-  isDisabled,
-  clickEvent,
-  type,
-}: ButtonBasePropType) {
-  return (
-    <button
-      disabled={isDisabled}
-      className={`${classes} back-btn`}
-      type={type}
-      onClick={(e) => clickEvent(e)}
-    >
-      {children}
-      {/* <ArrowLeft /> */}
-    </button>
-  );
-}
-
-BackButton.defaultProps = { ...DEFAULT_BUTTON_PROPS };
 
 export function EditButton({
   children,
@@ -109,20 +106,44 @@ export function EditButton({
   isDisabled,
   clickEvent,
   type,
+  fontColor,
+  backgroundColor,
+  side = "left",
 }: ButtonBasePropType) {
   return (
     <button
       disabled={isDisabled}
-      className={`${classes} edit-btn`}
+      className={`edit-btn ${classes} text-${fontColor} bg-${backgroundColor}`}
       type={type}
       onClick={(e) => clickEvent(e)}
     >
-      {children}
-      {/* <EditPencil /> */}
+      <BaseButton side={side} Icon={<EditIcon />} children={children} />
     </button>
   );
 }
 
 EditButton.defaultProps = { ...DEFAULT_BUTTON_PROPS };
 
-export default Button;
+export function DeleteButton({
+  children,
+  classes,
+  isDisabled,
+  clickEvent,
+  type,
+  fontColor,
+  backgroundColor,
+  side = "left",
+}: ButtonBasePropType) {
+  return (
+    <button
+      disabled={isDisabled}
+      className={`del-btn ${classes} text-${fontColor} bg-${backgroundColor}`}
+      type={type}
+      onClick={(e) => clickEvent(e)}
+    >
+      <BaseButton side={side} Icon={<RemoveIcon />} children={children} />
+    </button>
+  );
+}
+
+DeleteButton.defaultProps = { ...DEFAULT_BUTTON_PROPS };

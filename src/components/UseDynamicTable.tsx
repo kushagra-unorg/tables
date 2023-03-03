@@ -17,6 +17,7 @@ import {
   TextInput,
 } from "./Form";
 import { ChangeEventType, ClickEventType } from "./types/events";
+import { DeleteButton, Button } from "./Buttons";
 
 /**
  * Function to make headers from the data object.
@@ -139,13 +140,13 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
         return <>{elm?.toString()}</>;
       case "button":
         return (
-          <button
-            onClick={(e: ClickEventType<HTMLButtonElement>) =>
+          <Button
+            clickEvent={(e: ClickEventType<HTMLButtonElement>) =>
               header.clickFunction(e, row)
             }
           >
             <>{header.title}</>
-          </button>
+          </Button>
         );
       case "input":
         return getInput<T>(
