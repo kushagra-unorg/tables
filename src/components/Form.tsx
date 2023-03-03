@@ -1,5 +1,10 @@
-import { ChangeEventHandler, ReactNode, useRef } from "react";
-import { ChangeEvent, FormEventType } from "./types/events";
+import { ReactNode, useRef } from "react";
+import {
+  ChangeEventHandlerType,
+  ChangeEventType,
+  FormEventType,
+} from "./types/events";
+import { RefObjectType } from "./types/hooks";
 
 export type InputTypes =
   | "checkbox"
@@ -23,7 +28,7 @@ export function Form({
   children: ReactNode;
   onSubmit?: (e: FormEventType) => void;
   className?: string;
-  ref?: React.MutableRefObject<HTMLFormElement>;
+  ref?: RefObjectType<HTMLFormElement>;
 }) {
   const formProps = { onSubmit, className, ref };
   return <form {...formProps}>{children}</form>;
@@ -33,7 +38,7 @@ type BaseInputType = {
   name: string;
   id: string;
   defaultValue?: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandlerType<HTMLInputElement>;
 };
 
 type TextInputPropsType = {
@@ -103,7 +108,7 @@ export function RadioInput(radioInputProps: RadioInputPropsType) {
 
 type FileInputPropsType = {
   maxSize?: number;
-  reference?: React.MutableRefObject<HTMLInputElement>;
+  reference?: RefObjectType<HTMLInputElement>;
   accept?: string;
 } & BaseInputType;
 
@@ -118,7 +123,7 @@ export function FileInput({
   },
 }: FileInputPropsType) {
   const imageRef = useRef<HTMLInputElement>(null!);
-  const handleFile = async (e: ChangeEvent) => {
+  const handleFile = async (e: ChangeEventType<HTMLInputElement>) => {
     if (!e.target.files?.length || !maxSize) return;
     const file = e.target.files[0];
     if (file.size / 1024 < maxSize) onChange(e);

@@ -3,7 +3,7 @@ import {
   TableHeaderType,
   TableButtonType,
   tableConfigType,
-} from "../tableTypes";
+} from "./types/tableTypes";
 import { Table, TableHead, TableHeader, TableRow } from "./Table";
 import {
   CheckboxInput,
@@ -16,6 +16,7 @@ import {
   TelInput,
   TextInput,
 } from "./Form";
+import { ChangeEventType, ClickEventType } from "./types/events";
 
 /**
  * Function to make headers from the data object.
@@ -34,7 +35,7 @@ const makeHeaders = (data: object): TableHeaderType[] => {
 
 const getInput = <T,>(
   type: InputTypes,
-  func: (e: React.ChangeEvent<HTMLInputElement>, d: unknown) => void,
+  func: (e: ChangeEventType<HTMLInputElement>, d: unknown) => void,
   defaultValue: string | undefined,
   row: T
 ): JSX.Element => {
@@ -43,7 +44,7 @@ const getInput = <T,>(
       return (
         <CheckboxInput
           defaultValue={defaultValue}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -52,7 +53,7 @@ const getInput = <T,>(
       return (
         <RadioInput
           defaultValue={defaultValue}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -63,7 +64,7 @@ const getInput = <T,>(
         <TextInput
           defaultValue={defaultValue}
           type={type}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -72,7 +73,7 @@ const getInput = <T,>(
       return (
         <TelInput
           defaultValue={defaultValue}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -84,7 +85,7 @@ const getInput = <T,>(
         <DateInput
           defaultValue={defaultValue}
           type={type}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -93,7 +94,7 @@ const getInput = <T,>(
       return (
         <FileInput
           defaultValue={defaultValue}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -102,7 +103,7 @@ const getInput = <T,>(
       return (
         <NumberInput
           defaultValue={defaultValue}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -111,7 +112,7 @@ const getInput = <T,>(
       return (
         <EmailInput
           defaultValue={defaultValue}
-          onChange={(e) => func(e, row)}
+          onChange={(e: ChangeEventType<HTMLInputElement>) => func(e, row)}
           id=""
           name=""
         />
@@ -138,7 +139,11 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
         return <>{elm?.toString()}</>;
       case "button":
         return (
-          <button onClick={(e) => header.clickFunction(e, row)}>
+          <button
+            onClick={(e: ClickEventType<HTMLButtonElement>) =>
+              header.clickFunction(e, row)
+            }
+          >
             <>{header.title}</>
           </button>
         );
@@ -151,7 +156,11 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
         );
       case "select":
         return (
-          <select onChange={(e) => header.changeFunction(e, row)}>
+          <select
+            onChange={(e: ChangeEventType<HTMLSelectElement>) =>
+              header.changeFunction(e, row)
+            }
+          >
             {header.selectOptions.map((op) => (
               <option
                 selected={
@@ -223,7 +232,10 @@ const makeColumns = (headers: TableHeaderType[]): ReactNode[] =>
  * @returns A JSX Button Element.
  */
 const makeButton = <T,>(btn: TableButtonType, row: T): ReactNode => (
-  <button className={btn.classes} onClick={(e) => btn.click(e, row)}>
+  <button
+    className={btn.classes}
+    onClick={(e: ClickEventType<HTMLButtonElement>) => btn.click(e, row)}
+  >
     {btn.text}
   </button>
 );

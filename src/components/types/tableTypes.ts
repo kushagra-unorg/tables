@@ -1,30 +1,22 @@
-import { InputTypes } from "./components/Form";
+import { InputTypes } from "../Form";
+import { ChangeEventType, ClickEventType } from "./events";
 
 type ButtonHeaderType = {
   type: "button";
-  clickFunction: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    d: unknown
-  ) => void;
+  clickFunction: (e: ClickEventType<HTMLButtonElement>, d: unknown) => void;
 };
 
 type InputHeaderType = {
   type: "input";
   inputType: InputTypes;
-  changeFunction: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    d: unknown
-  ) => void;
+  changeFunction: (e: ChangeEventType<HTMLInputElement>, d: unknown) => void;
 };
 
 type SelectHeaderType = {
   type: "select";
   selectOptions: { text: string; value: string | number }[];
   defaultCheck?: "text" | "value";
-  changeFunction: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    d: unknown
-  ) => void;
+  changeFunction: (e: ChangeEventType<HTMLSelectElement>, d: unknown) => void;
 };
 
 type BasicHeaderType = {
@@ -43,7 +35,7 @@ export type TableHeaderType = (
 };
 
 export type TableButtonType = {
-  click: (e: React.MouseEvent<HTMLButtonElement>, data: unknown) => void;
+  click: (e: ClickEventType<HTMLButtonElement>, data: unknown) => void;
   text: string;
   classes?: string;
 };

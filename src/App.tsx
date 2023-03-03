@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import useDynamicTable from "./components/UseDynamicTable";
-import { TableButtonType } from "./tableTypes";
+import { TableButtonType } from "./components/types/tableTypes";
 
 import {
   TEST_ORDERS,
@@ -11,7 +11,7 @@ import {
   TEST_CUSTOMERS,
 } from "./testData";
 import { TextInput } from "./components/Form";
-import { ChangeEvent } from "./components/types/events";
+import { ChangeEventType } from "./components/types/events";
 
 function App() {
   const [buttons, setButtons] = useState<TableButtonType[]>([]);
@@ -72,7 +72,9 @@ function App() {
         type="text"
         placeholder="HEY"
         value={val}
-        onChange={(e: ChangeEvent) => setVal(e.target.value)}
+        onChange={(e: ChangeEventType<HTMLInputElement>) =>
+          setVal(e.target.value)
+        }
       />
     </div>
   );

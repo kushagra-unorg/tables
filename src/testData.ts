@@ -1,4 +1,5 @@
-import { TableHeaderType } from "./tableTypes";
+import { ChangeEventType, ClickEventType } from "./components/types/events";
+import { TableHeaderType } from "./components/types/tableTypes";
 
 const INVENTORIES_DATA = [
   {
@@ -893,15 +894,12 @@ export const TEST_ORDERS: {
   headers: TableHeaderType[];
 } = { data: ORDERS_DATA, headers: [] };
 
-function clickFunction(
-  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  d: unknown
-) {
+function clickFunction(e: ClickEventType<HTMLButtonElement>, d: unknown) {
   const data = d as typeof INVENTORIES_DATA[0];
   console.log("click", data.item_name);
 }
 function changeFunction(
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  e: ChangeEventType<HTMLInputElement | HTMLSelectElement>,
   d: unknown
 ) {
   const data = d as typeof INVENTORIES_DATA[0];
