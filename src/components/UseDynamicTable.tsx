@@ -69,7 +69,7 @@ const getInput = <T,>(
           name=""
         />
       );
-    case "checkbox":
+    case "tel":
       return (
         <TelInput
           defaultValue={defaultValue}
