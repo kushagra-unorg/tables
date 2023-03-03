@@ -39,7 +39,7 @@ export type TableButtonType = {
   text: string;
   classes?: string;
 };
-export type tableConfigType = {
+export type TableConfigType = {
   data: object[];
   classes?: string;
   rowOnClick?: <T>(data: T) => void;

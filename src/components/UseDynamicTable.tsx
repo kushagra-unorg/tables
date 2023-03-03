@@ -2,9 +2,9 @@ import { ReactNode, useMemo } from "react";
 import {
   TableHeaderType,
   TableButtonType,
-  tableConfigType,
+  TableConfigType,
 } from "./types/tableTypes";
-import { Table, TableHead, TableHeader, TableRow } from "./Table";
+import { Table, TableCell, TableHead, TableHeader, TableRow } from "./Table";
 import {
   CheckboxInput,
   DateInput,
@@ -17,8 +17,7 @@ import {
   TextInput,
 } from "./Form";
 import { ChangeEventType, ClickEventType } from "./types/events";
-import { DeleteButton, Button } from "./Buttons";
-
+import { Button } from "./Buttons";
 /**
  * Function to make headers from the data object.
  * @param {object} data data object to extract keys from.
@@ -26,10 +25,10 @@ import { DeleteButton, Button } from "./Buttons";
  */
 const makeHeaders = (data: object): TableHeaderType[] => {
   const keys = Object.keys(data);
-  let headers: TableHeaderType[] = keys.map((key) => ({
+  const headers: TableHeaderType[] = keys.map((key) => ({
     title: key.split("_").join(" "),
     type: "text",
-    key: key,
+    key,
   }));
   return headers;
 };
@@ -124,6 +123,21 @@ const getInput = <T,>(
 };
 
 /**
+ * Function to make button from the btn object.
+ * @param {object} btn data object to extract keys from.
+ * @param {object} row row object.
+ * @returns A JSX Button Element.
+ */
+const makeButton = <T,>(btn: TableButtonType, row: T): ReactNode => (
+  <Button
+    classes={btn.classes}
+    clickEvent={(e: ClickEventType<HTMLButtonElement>) => btn.click(e, row)}
+  >
+    {btn.text}
+  </Button>
+);
+
+/**
  * Function to make a cell from the header object.
  * @param {object} header header object to get element from.
  * @param {object} row row object.
@@ -135,7 +149,7 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
   if (elm !== null)
     switch (header.type) {
       case "image":
-        return <img src={elm?.toString()} />;
+        return <img src={elm?.toString()} alt="" />;
       case "text":
         return <>{elm?.toString()}</>;
       case "button":
@@ -166,14 +180,14 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
               <option
                 selected={
                   header.defaultCheck &&
-                  header.defaultCheck == "text" &&
+                  header.defaultCheck === "text" &&
                   op.text === elm
                     ? true
-                    : header.defaultCheck &&
-                      header.defaultCheck == "value" &&
-                      op.value === elm
-                    ? true
-                    : false
+                    : !!(
+                        header.defaultCheck &&
+                        header.defaultCheck === "value" &&
+                        op.value === elm
+                      )
                 }
                 value={op.value}
               >
@@ -193,23 +207,28 @@ const getCell = <T,>(header: TableHeaderType, row: T): ReactNode => {
  * @param {object} data data object.
  * @param {array} headers  array of header objects.
  * @param {function} rowOnClick  function for Click on Row.
- * @returns An array of JSX Elements(tbody>tr>td)
+ * @returns An array of JSX Elements(tbody>tr>TableCell)
  */
 const makeRows = <T,>(
   data: T[],
   headers: TableHeaderType[],
   buttons: TableButtonType[],
-  rowOnClick: <T>(data: T) => void
+  rowOnClick: <D>(data: D) => void
 ): ReactNode[] =>
   data.map((row) => (
     <TableRow>
       {headers.map((header) => (
-        <td className={header.classes} onClick={() => rowOnClick<T>(row)}>
+        <TableCell
+          className={header.classes}
+          onClick={() => rowOnClick<T>(row)}
+        >
           {getCell<typeof row>(header, row)}
-        </td>
+        </TableCell>
       ))}
       {buttons.length
-        ? buttons.map((btn) => <td>{makeButton<typeof row>(btn, row)}</td>)
+        ? buttons.map((btn) => (
+            <TableCell>{makeButton<typeof row>(btn, row)}</TableCell>
+          ))
         : null}
     </TableRow>
   ));
@@ -221,25 +240,10 @@ const makeRows = <T,>(
  */
 const makeColumns = (headers: TableHeaderType[]): ReactNode[] =>
   headers.map((header) => (
-    <TableHeader classes={header.classes ? header.classes : ""}>
+    <TableHeader className={header.classes ? header.classes : ""}>
       {header.title}
     </TableHeader>
   ));
-
-/**
- * Function to make button from the btn object.
- * @param {object} btn data object to extract keys from.
- * @param {object} row row object.
- * @returns A JSX Button Element.
- */
-const makeButton = <T,>(btn: TableButtonType, row: T): ReactNode => (
-  <button
-    className={btn.classes}
-    onClick={(e: ClickEventType<HTMLButtonElement>) => btn.click(e, row)}
-  >
-    {btn.text}
-  </button>
-);
 
 /**
  *@summary This hook takes the configuration object and makes a dynamic table in accordance 
@@ -267,14 +271,14 @@ const useDynamicTable = ({
   headers = [],
   buttons = [],
   classes = "",
-  rowOnClick = () => {
-    return;
-  },
-}: tableConfigType) => {
+  rowOnClick = () => {},
+}: TableConfigType) => {
+  // eslint-disable-next-line no-param-reassign, react-hooks/rules-of-hooks
   if (!headers.length) headers = useMemo(() => makeHeaders(data[0]), [data]);
 
   const Rows = useMemo<ReactNode[]>(
     () => makeRows<typeof data[number]>(data, headers, buttons, rowOnClick),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [headers, data, buttons]
   );
 
@@ -282,11 +286,12 @@ const useDynamicTable = ({
 
   const DynamicTable = useMemo(
     () => (
-      <Table classes={classes}>
+      <Table className={classes}>
         <TableHead>{Columns}</TableHead>
         {Rows}
       </Table>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [Rows]
   );
 

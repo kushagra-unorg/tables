@@ -1,23 +1,26 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { ReactNode } from "react";
 
-type basePropTypes = {
+type BasePropTypes = {
   children: ReactNode;
-  classes?: string;
+  // eslint-disable-next-line react/require-default-props
+  className?: string;
 };
 
 /**
  * <table>
  */
-export function Table({ children, classes = undefined }: basePropTypes) {
-  return <table className={classes}>{children}</table>;
+export function Table({ children, className = undefined }: BasePropTypes) {
+  return <table className={className}>{children}</table>;
 }
 
 /**
  * <tbody><tr>
  */
-export function TableRow({ children, classes = undefined }: basePropTypes) {
+export function TableRow({ children, className = undefined }: BasePropTypes) {
   return (
-    <tbody className={classes}>
+    <tbody className={className}>
       <tr>{children}</tr>
     </tbody>
   );
@@ -25,9 +28,9 @@ export function TableRow({ children, classes = undefined }: basePropTypes) {
 /**
  * <thead><tr>
  */
-export function TableHead({ children, classes = undefined }: basePropTypes) {
+export function TableHead({ children, className = undefined }: BasePropTypes) {
   return (
-    <thead className={classes}>
+    <thead className={className}>
       <tr>{children}</tr>
     </thead>
   );
@@ -36,13 +39,25 @@ export function TableHead({ children, classes = undefined }: basePropTypes) {
 /**
  * <td>
  */
-export function TableCell({ children, classes = undefined }: basePropTypes) {
-  return <td className={classes}>{children}</td>;
+export function TableCell({
+  children,
+  className = undefined,
+  onClick = () => {},
+}: // eslint-disable-next-line react/require-default-props
+{ onClick?: () => void } & BasePropTypes) {
+  return (
+    <td onClick={onClick} className={className}>
+      {children}
+    </td>
+  );
 }
 
 /**
  * <th>
  */
-export function TableHeader({ children, classes = undefined }: basePropTypes) {
-  return <th className={classes}>{children}</th>;
+export function TableHeader({
+  children,
+  className = undefined,
+}: BasePropTypes) {
+  return <th className={className}>{children}</th>;
 }
