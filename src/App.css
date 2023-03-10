@@ -3,17 +3,27 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --sidebar-width:0vw;
   --white: #f0eff7;
   --black: #090814;
+  --black-60: rgba(9, 8, 20, 0.6);
+  --black-40: rgba(9, 8, 20, 0.4);
   --black-20: rgba(9, 8, 20, 0.2);
+  --black-10: rgba(9, 8, 20, 0.1);
   --dark: rgb(12, 6, 87);
+  --dark-60: rgba(12, 6, 87, 0.6);
+  --dark-40: rgba(12, 6, 87, 0.4);
   --dark-20: rgba(12, 6, 87, 0.2);
   --dark-10: rgba(12, 6, 87, 0.1);
   --blue: rgb(0, 56, 211);
+  --blue-40: rgb(0, 56, 211,0.4);
+  --blue-20: rgb(0, 56, 211,0.2);
   --red: rgb(202, 0, 0);
   --accent: rgb(121, 9, 226);
+  --accent-40: rgba(121, 9, 226,0.4);
 }
 
+/* Table */
 table {
   background-color: var(--white);
   width: inherit;
@@ -90,4 +100,170 @@ table th {
   padding: 0.5rem 0;
   border: 1px solid var(--black-20);
   border-collapse: collapse;
+}
+
+/* Modal */
+.modal-wrapper {
+
+  --animation-bg-time: 0.4s;
+  --animation-move-in-time: 0.5s;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+ }
+  .modal-wrapper .modal-bg {
+
+    position: absolute;
+    top: 0;right: 0;
+    width: 100vw;
+    height: 100vh;
+
+  }
+  .modal-wrapper .modal-bg.close-modal {
+    z-index: -10;
+  }
+
+  .modal-wrapper .modal-bg.open-modal {
+    z-index: 1;
+    pointer-events: all;
+  }
+
+  .modal-wrapper.open-modal > .modal-bg {
+    animation: modal var(--animation-bg-time) ease-in-out forwards;
+  }
+
+  .modal-wrapper .modal {
+    position: absolute;
+
+    transition: all var(--animation-move-in-time) ease-in-out;
+    pointer-events: all;
+    z-index: 2;
+    box-shadow: -7px 0 20px var(--black-40);
+    background: var(--white);
+
+  }
+  .modal-wrapper .modal.right-modal {
+    height: 100vh !important;
+  }
+
+  .modal-wrapper .modal.bottom-modal {
+    width: calc(100vw - var(--sidebar-width)) !important;
+  }
+
+  .modal-wrapper .modal .modal-header {
+
+    display: grid;
+    padding: .5rem .75rem;
+    align-items: center;
+    justify-items: start;
+    grid-template-columns: 1.7fr 0.3fr;
+    grid-template-areas:
+      'title close'
+      'subtitle close';
+    background: var(--blue-40);
+
+  }
+  .modal-wrapper .modal .modal-header h2 {
+    grid-area: title;
+  }
+
+  .modal-wrapper .modal .modal-header p {
+    grid-area: subtitle;
+  }
+
+  .modal-wrapper .modal .modal-header img {
+    justify-self: center;
+
+    grid-area: close;
+  }
+
+  .modal-wrapper .modal .modal-content {
+
+    padding: .5rem .75rem;
+    background: transparent;
+
+  }
+  .modal-wrapper .modal .modal-content form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+  }
+  .modal-wrapper .modal .modal-content form .input-group {
+    display: flex;
+    flex-direction: column;
+    padding-left:1rem ;
+    padding-right:1rem ;
+    gap: .25rem;
+
+    background: transparent;
+
+  }
+  .modal-wrapper .modal .modal-content from .input-group label {
+text-transform: capitalize;
+    letter-spacing: 0.1rem;
+  }
+
+  .modal-wrapper .modal .modal-content from .input-group input,
+  .modal-wrapper .modal .modal-content from .input-group select {
+    padding: .25rem .5rem;
+    width: 100%;
+
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid var(--dark-60);
+    background: var(--black-10);
+
+  }
+  .modal-wrapper .modal .modal-content from .input-group input:active,
+  .modal-wrapper .modal .modal-content from .input-group select:active,
+  .modal-wrapper .modal .modal-content from .input-group input:focus,
+  .modal-wrapper .modal .modal-content from .input-group select:focus {
+    border: 1px solid var(--accent-40);
+  }
+
+  .modal-wrapper .modal .modal-content from button[type='submit'] {
+    margin-top: 1rem;
+  }
+
+  .modal-wrapper.open-modal > .modal.right-modal {
+    right: 0;
+  }
+
+  .modal-wrapper.close-modal > .modal.right-modal {
+    right: -70%;
+  }
+
+  .modal-wrapper.open-modal > .modal.bottom-modal {
+
+    bottom: 0;
+  }
+  .modal-wrapper.open-modal > .modal.bottom-modal .modal-header {
+    grid-template-columns: 1.9fr 0.1fr;
+  }
+
+  .modal-wrapper.close-modal > .modal.bottom-modal {
+    bottom: -70%;
+  }
+
+
+@keyframes modal {
+  0% {
+    opacity: 0;
+    background: transparent;
+  }
+
+  100% {
+    opacity: 1;
+    background: var(--black-40);
+  }
 }

@@ -565,3 +565,30 @@ export function WarehouseIcon() {
     </svg>
   );
 }
+
+export function CloseIcon() {
+  return (
+    <svg
+      width="55"
+      height="56"
+      viewBox="0 0 55 56"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M28 44C36.8366 44 44 36.8366 44 28C44 19.1634 36.8366 12 28 12C19.1634 12 12 19.1634 12 28C12 36.8366 19.1634 44 28 44Z"
+        stroke="#1E1A1A"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 21L35 35M35 21L20 35"
+        stroke="#1E1A1A"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
