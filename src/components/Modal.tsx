@@ -28,29 +28,22 @@ function Modal({
   }, [isOpen]);
 
   return (
-    <div className={`modal-wrapper ${isOpen ? "open-modal" : "close-modal"}`}>
-      <div
-        style={{
-          width: `${type === "bottom" ? "100" : width}vw`,
-          height: `${type === "right" ? "100" : height}vh`,
-        }}
-        className={`modal ${type}-modal`}
-      >
-        <div className="modal-header">
-          <h2>{title}</h2>
-          {subtitle?.length ? <p>{subtitle}</p> : null}
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-static-element-interactions */}
-          <div onClick={handleClose}>
-            <CloseIcon />
-          </div>
+    <div
+      style={{
+        width: `${type === "bottom" ? "100" : width}vw`,
+        height: `${type === "right" ? "100" : height}vh`,
+      }}
+      className={`modal ${type}-modal`}
+    >
+      <div className="modal-header">
+        <h2>{title}</h2>
+        {subtitle?.length ? <p>{subtitle}</p> : null}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-static-element-interactions */}
+        <div onClick={handleClose}>
+          <CloseIcon />
         </div>
-        <div className="modal-content">{children}</div>
       </div>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-static-element-interactions */}
-      <div
-        onClick={handleClose}
-        className={`modal-bg ${isOpen ? "open-modal" : "close-modal"}`}
-      />
+      <div className="modal-content">{children}</div>
     </div>
   );
 }

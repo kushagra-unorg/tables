@@ -17,8 +17,7 @@ const findModal = (
 
 const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedModal, setSelectedModal] = useState<ModalConfigType>();
-  let ModalElm: ReactNode;
+  const [selectedModal, setSelectedModal] = useState<ReactNode>();
   const openModal = (name: string) => {
     console.log("name :>> ", name);
     console.log("!isOpen :>> ", !isOpen);
@@ -27,45 +26,65 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
       setIsOpen(true);
       let modal = findModal(name, modalConfig);
       console.log("modal :>> ", modal);
-      setSelectedModal(modal);
+      changeModal(modal);
     }
   };
   const closeModal = () => {
     if (isOpen) {
       setIsOpen(false);
-      setSelectedModal(undefined);
     }
   };
 
   useEffect(() => {
-    if (Array.isArray(modalConfig)) setSelectedModal(modalConfig[0]);
-    else setSelectedModal(modalConfig);
+    if (Array.isArray(modalConfig)) changeModal(modalConfig[0]);
+    else changeModal(modalConfig);
     return () => setIsOpen(false);
   }, [modalConfig]);
 
   useEffect(() => {
-    if (selectedModal) {
+    console.log("isOpen");
+  }, [isOpen]);
+
+  // TODO:: Make Container/BG Static and swap children when open or close
+  const changeModal = (modal: ModalConfigType) => {
+    if (modal) {
+      console.log("modal :>> ", modal);
       const modalProps = {
-        subtitle: selectedModal.subtitle,
-        height: selectedModal.height,
-        width: selectedModal.width,
+        subtitle: modal.subtitle,
+        height: modal.height,
+        width: modal.width,
       };
-      ModalElm ==
-      (
-        <Modal
-          title={selectedModal.title}
-          type={selectedModal.type}
-          isOpen={isOpen}
-          handleClose={closeModal}
-          children={selectedModal.children}
-          {...modalProps}
-        />
+      setSelectedModal(
+        <>
+          <Modal
+            title={modal.title}
+            type={modal.type}
+            isOpen={isOpen}
+            handleClose={closeModal}
+            {...modalProps}
+          >
+            {modal.children}
+          </Modal>
+        </>
       );
     }
-    return () => setIsOpen(false);
-  }, [selectedModal]);
+  };
 
-  return { isOpen, openModal, closeModal, Modal: ModalElm };
+  return {
+    isOpen,
+    openModal,
+    closeModal,
+    Modal: (
+      <div className={`modal-wrapper ${isOpen ? "open-modal" : "close-modal"}`}>
+        {selectedModal}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-static-element-interactions */}
+        <div
+          onClick={closeModal}
+          className={`modal-bg ${isOpen ? "open-modal" : "close-modal"}`}
+        />
+      </div>
+    ),
+  };
 };
 
 export default useModal;

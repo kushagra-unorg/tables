@@ -143,7 +143,7 @@ table th {
   .modal-wrapper .modal {
     position: absolute;
 
-    transition: all var(--animation-move-in-time) ease-in-out;
+    transition: inset var(--animation-move-in-time) ease-in-out;
     pointer-events: all;
     z-index: 2;
     box-shadow: -7px 0 20px var(--black-40);
