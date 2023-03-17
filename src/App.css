@@ -156,6 +156,7 @@ table th {
 
   .modal-wrapper .modal.bottom-modal {
     width: calc(100vw - var(--sidebar-width)) !important;
+    right:0;
   }
 
   .modal-wrapper .modal .modal-header {
@@ -235,23 +236,23 @@ text-transform: capitalize;
     margin-top: 1rem;
   }
 
-  .modal-wrapper.open-modal > .modal.right-modal {
+  .modal-wrapper > .modal-element-container.open-modal >.modal.right-modal {
     right: 0;
   }
 
-  .modal-wrapper.close-modal > .modal.right-modal {
+  .modal-wrapper >.modal-element-container.close-modal> .modal.right-modal {
     right: -70%;
   }
 
-  .modal-wrapper.open-modal > .modal.bottom-modal {
-
+  .modal-wrapper > .modal-element-container.open-modal >.modal.bottom-modal {
     bottom: 0;
   }
-  .modal-wrapper.open-modal > .modal.bottom-modal .modal-header {
+
+  .modal-wrapper > .modal-element-container.open-modal >.modal.bottom-modal .modal-header {
     grid-template-columns: 1.9fr 0.1fr;
   }
 
-  .modal-wrapper.close-modal > .modal.bottom-modal {
+  .modal-wrapper >.modal-element-container.close-modal> .modal.bottom-modal {
     bottom: -70%;
   }
 

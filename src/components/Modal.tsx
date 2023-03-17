@@ -22,11 +22,6 @@ function Modal({
   handleClose,
   children,
 }: ModalPropsType) {
-  useEffect(() => {
-    console.log("title :>> ", title);
-    console.log("children :>> ", children);
-  }, [isOpen]);
-
   return (
     <div
       style={{
