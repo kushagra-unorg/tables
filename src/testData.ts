@@ -896,12 +896,10 @@ export const TEST_ORDERS: {
 
 function clickFunction(e: ClickEventType<HTMLButtonElement>, d: unknown) {
   const data = d as typeof INVENTORIES_DATA[0];
-  console.log("click", data.item_name);
 }
 function changeFunction(
   e: ChangeEventType<HTMLInputElement | HTMLSelectElement>,
   d: unknown
 ) {
   const data = d as typeof INVENTORIES_DATA[0];
-  console.log("change", e.target.value);
 }

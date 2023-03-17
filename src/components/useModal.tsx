@@ -22,13 +22,9 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
   const [allModals, setAllModals] =
     useState<{ name: string; elm: ReactNode }[]>();
   const openModal = (name: string) => {
-    console.log("name :>> ", name);
-    console.log("!isOpen :>> ", !isOpen);
     if (!isOpen) {
-      console.log("isOpen :>> ", isOpen);
       setIsOpen(true);
       let modal = findModal(name, modalConfig);
-      console.log("modal :>> ", modal);
       changeModal(modal);
     }
   };
@@ -75,7 +71,6 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
       type: "bottom",
     }
   ) => {
-    console.log("modal CHange :>> ", modal);
     if (modal) {
       if (allModals) {
         const index = allModals.findIndex((m) => m.name === modal.name);
@@ -90,10 +85,6 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
     else makeModals([modalConfig]);
     return () => setIsOpen(false);
   }, [modalConfig]);
-
-  useEffect(() => {
-    console.log("openModals:", openModals);
-  }, [openModals]);
 
   return {
     isOpen,

@@ -36,11 +36,7 @@ const modalConfig: ModalConfigType[] = [
 ];
 
 function App() {
-  const { closeModal, isOpen, openModal, Modal } = useModal(modalConfig);
-  useEffect(() => {
-    console.log("isOpen:>>", isOpen);
-    console.log("Modal:>>", Modal);
-  }, [Modal]);
+  const { openModal, Modal } = useModal(modalConfig);
 
   return (
     <div className="App">
