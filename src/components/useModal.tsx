@@ -2,6 +2,8 @@ import { useState, useEffect, ReactNode } from "react";
 import { ModalConfigType } from "./types/modalTypes";
 import Modal from "./Modal";
 
+// TODO:: Clean Stuff Out, Make Pure Functions, Reduce Code, Make Modular
+
 const findModal = (
   name: string,
   modalConfig: ModalConfigType | ModalConfigType[]
@@ -18,7 +20,6 @@ const findModal = (
 const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openModals, setOpenModals] = useState<boolean[]>();
-  const [selectedModal, setSelectedModal] = useState<number>(0);
   const [allModals, setAllModals] =
     useState<{ name: string; elm: ReactNode }[]>();
   const openModal = (name: string) => {
@@ -62,7 +63,6 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
     setAllModals(modals);
   };
 
-  // TODO:: Make Container/BG Static and swap children when open or close
   const changeModal = (
     modal: ModalConfigType = {
       name: "",
@@ -74,7 +74,6 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
     if (modal) {
       if (allModals) {
         const index = allModals.findIndex((m) => m.name === modal.name);
-        setSelectedModal(index);
         setOpenModals((s) => s?.map((b, i) => i === index));
       }
     }
