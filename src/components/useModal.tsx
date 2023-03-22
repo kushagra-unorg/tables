@@ -2,8 +2,6 @@ import { useState, useEffect, ReactNode } from "react";
 import { ModalConfigType } from "./types/modalTypes";
 import Modal from "./Modal";
 
-// TODO:: Clean Stuff Out, Make Pure Functions, Reduce Code, Make Modular
-
 const findModal = (
   name: string,
   modalConfig: ModalConfigType | ModalConfigType[]
@@ -17,6 +15,85 @@ const findModal = (
   return foundModal;
 };
 
+const makeModals = (
+  conf: ModalConfigType[],
+  openModals: boolean[] | undefined,
+  closeModal: () => void,
+  setOpenModals: React.Dispatch<React.SetStateAction<boolean[] | undefined>>,
+  setAllModals: React.Dispatch<
+    React.SetStateAction<
+      | {
+          name: string;
+          elm: ReactNode;
+        }[]
+      | undefined
+    >
+  >
+) => {
+  let modals: { name: string; elm: ReactNode }[] = [];
+  setOpenModals(conf.map(() => false));
+  conf.map((m, i) => {
+    const modalProps = {
+      subtitle: m.subtitle,
+      height: m.height,
+      width: m.width,
+    };
+    modals.push({
+      name: m.name,
+      elm: (
+        <Modal
+          title={m.title}
+          type={m.type}
+          isOpen={openModals ? openModals[i] : false}
+          handleClose={closeModal}
+          {...modalProps}
+        >
+          {m.children}
+        </Modal>
+      ),
+    });
+  });
+  setAllModals(modals);
+};
+
+const changeModal = (
+  allModals:
+    | {
+        name: string;
+        elm: ReactNode;
+      }[]
+    | undefined,
+  setOpenModals: React.Dispatch<React.SetStateAction<boolean[] | undefined>>,
+  modal: ModalConfigType = {
+    name: "",
+    children: "",
+    title: "",
+    type: "bottom",
+  }
+) => {
+  if (modal) {
+    if (allModals) {
+      const index = allModals.findIndex((m) => m.name === modal.name);
+      setOpenModals((s) => s?.map((b, i) => i === index));
+    }
+  }
+};
+
+/**
+ *@summary This hook takes the configuration object and makes modal elements in accordance 
+  with the configuration, and the data provided.
+
+ *@description It can make single/multiple modals.
+
+ * @param {object} modalConfig Configuration object for the modal(s):
+  * @field name: string;
+  * @field title: string;
+  * @field type: "right" | "bottom";
+  * @field subtitle (optional) : string;
+  * @field height (optional) : 50 | 40 | 30 | 100;
+  * @field width (optional) : 80 | 60 | 40 | 30 | 100;
+  * @field children: ReactNode;
+ */
 const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openModals, setOpenModals] = useState<boolean[]>();
@@ -26,62 +103,33 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
     if (!isOpen) {
       setIsOpen(true);
       let modal = findModal(name, modalConfig);
-      changeModal(modal);
+      changeModal(allModals, setOpenModals, modal);
     }
   };
   const closeModal = () => {
     if (isOpen) {
       setIsOpen(false);
-      changeModal();
-    }
-  };
-
-  const makeModals = (conf: ModalConfigType[]) => {
-    let modals: { name: string; elm: ReactNode }[] = [];
-    setOpenModals(conf.map(() => false));
-    conf.map((m, i) => {
-      const modalProps = {
-        subtitle: m.subtitle,
-        height: m.height,
-        width: m.width,
-      };
-      modals.push({
-        name: m.name,
-        elm: (
-          <Modal
-            title={m.title}
-            type={m.type}
-            isOpen={openModals ? openModals[i] : false}
-            handleClose={closeModal}
-            {...modalProps}
-          >
-            {m.children}
-          </Modal>
-        ),
-      });
-    });
-    setAllModals(modals);
-  };
-
-  const changeModal = (
-    modal: ModalConfigType = {
-      name: "",
-      children: "",
-      title: "",
-      type: "bottom",
-    }
-  ) => {
-    if (modal) {
-      if (allModals) {
-        const index = allModals.findIndex((m) => m.name === modal.name);
-        setOpenModals((s) => s?.map((b, i) => i === index));
-      }
+      changeModal(allModals, setOpenModals);
     }
   };
 
   useEffect(() => {
-    if (Array.isArray(modalConfig)) makeModals(modalConfig);
-    else makeModals([modalConfig]);
+    if (Array.isArray(modalConfig))
+      makeModals(
+        modalConfig,
+        openModals,
+        closeModal,
+        setOpenModals,
+        setAllModals
+      );
+    else
+      makeModals(
+        [modalConfig],
+        openModals,
+        closeModal,
+        setOpenModals,
+        setAllModals
+      );
     return () => setIsOpen(false);
   }, [modalConfig]);
 
