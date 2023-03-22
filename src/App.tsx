@@ -45,6 +45,7 @@ function App() {
       <Button clickEvent={() => openModal("test2")}>Click2</Button>
       <Button clickEvent={() => openModal("test3")}>Click3</Button>
       <Button clickEvent={() => openModal("test4")}>Click4</Button>
+      <Button clickEvent={() => openModal("test5")}>Click5</Button>
     </div>
   );
 }

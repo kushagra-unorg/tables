@@ -2,15 +2,41 @@ import { useState, useEffect, ReactNode } from "react";
 import { ModalConfigType } from "./types/modalTypes";
 import Modal from "./Modal";
 
+const ERROR_MODAL_CONFIG: ModalConfigType = {
+  name: "error",
+  title: "Error",
+  type: "bottom",
+  subtitle: "You Selected the wrong modal",
+  height: 50,
+  children: (
+    <>
+      {" "}
+      <h4
+        style={{
+          textTransform: "uppercase",
+          fontSize: "2rem",
+          textAlign: "left",
+          color: "red",
+        }}
+      >
+        Error
+      </h4>{" "}
+    </>
+  ),
+};
+
 const findModal = (
   name: string,
   modalConfig: ModalConfigType | ModalConfigType[]
 ) => {
   let foundModal: ModalConfigType | undefined;
+  console.log("Iffie arra", !Array.isArray(modalConfig));
   if (!Array.isArray(modalConfig)) foundModal = modalConfig;
   else {
+    console.log("Elsee arra");
     foundModal = modalConfig.find((modal) => modal.name === name);
-    if (!foundModal) foundModal = modalConfig[0];
+    console.log("Elsee Iffie", foundModal);
+    if (!foundModal) foundModal = ERROR_MODAL_CONFIG;
   }
   return foundModal;
 };
@@ -31,7 +57,7 @@ const makeModals = (
   >
 ) => {
   let modals: { name: string; elm: ReactNode }[] = [];
-  setOpenModals(conf.map(() => false));
+  setOpenModals([...conf.map(() => false), false]);
   conf.map((m, i) => {
     const modalProps = {
       subtitle: m.subtitle,
@@ -52,6 +78,21 @@ const makeModals = (
         </Modal>
       ),
     });
+  });
+  modals.push({
+    name: ERROR_MODAL_CONFIG.name,
+    elm: (
+      <Modal
+        title={ERROR_MODAL_CONFIG.title}
+        type={ERROR_MODAL_CONFIG.type}
+        isOpen={openModals ? openModals[openModals.length - 1] : false}
+        handleClose={closeModal}
+        subtitle={ERROR_MODAL_CONFIG.subtitle}
+        height={ERROR_MODAL_CONFIG.height}
+      >
+        {ERROR_MODAL_CONFIG.children}
+      </Modal>
+    ),
   });
   setAllModals(modals);
 };
@@ -103,6 +144,7 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
     if (!isOpen) {
       setIsOpen(true);
       let modal = findModal(name, modalConfig);
+      console.log("Found Modal::>>", modal);
       changeModal(allModals, setOpenModals, modal);
     }
   };
