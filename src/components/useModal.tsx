@@ -30,12 +30,11 @@ const findModal = (
   modalConfig: ModalConfigType | ModalConfigType[]
 ) => {
   let foundModal: ModalConfigType | undefined;
-  console.log("Iffie arra", !Array.isArray(modalConfig));
-  if (!Array.isArray(modalConfig)) foundModal = modalConfig;
-  else {
-    console.log("Elsee arra");
+  if (!Array.isArray(modalConfig)) {
+    if (modalConfig.name === name) foundModal = modalConfig;
+    else foundModal = ERROR_MODAL_CONFIG;
+  } else {
     foundModal = modalConfig.find((modal) => modal.name === name);
-    console.log("Elsee Iffie", foundModal);
     if (!foundModal) foundModal = ERROR_MODAL_CONFIG;
   }
   return foundModal;
