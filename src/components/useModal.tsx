@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode, useMemo } from "react";
 import { ModalConfigType } from "./types/modalTypes";
 import Modal from "./Modal";
 
@@ -44,20 +44,11 @@ const makeModals = (
   conf: ModalConfigType[],
   openModals: boolean[] | undefined,
   closeModal: () => void,
-  setOpenModals: React.Dispatch<React.SetStateAction<boolean[] | undefined>>,
-  setAllModals: React.Dispatch<
-    React.SetStateAction<
-      | {
-          name: string;
-          elm: ReactNode;
-        }[]
-      | undefined
-    >
-  >
+  setOpenModals: React.Dispatch<React.SetStateAction<boolean[] | undefined>>
 ) => {
-  let modals: { name: string; elm: ReactNode }[] = [];
+  const modals: { name: string; elm: ReactNode }[] = [];
   setOpenModals([...conf.map(() => false), false]);
-  conf.map((m, i) => {
+  conf.forEach((m, i) => {
     const modalProps = {
       subtitle: m.subtitle,
       height: m.height,
@@ -71,6 +62,7 @@ const makeModals = (
           type={m.type}
           isOpen={openModals ? openModals[i] : false}
           handleClose={closeModal}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...modalProps}
         >
           {m.children}
@@ -93,7 +85,7 @@ const makeModals = (
       </Modal>
     ),
   });
-  setAllModals(modals);
+  return modals;
 };
 
 const changeModal = (
@@ -112,8 +104,11 @@ const changeModal = (
   }
 ) => {
   if (modal) {
+    console.log("🚀 ~ file: useModal.tsx:116 ~ modal:", modal);
+    console.log("🚀 ~ file: useModal.tsx:118 ~ allModals:", allModals);
     if (allModals) {
       const index = allModals.findIndex((m) => m.name === modal.name);
+      console.log("🚀 ~ file: useModal.tsx:118 ~ index:", index);
       setOpenModals((s) => s?.map((b, i) => i === index));
     }
   }
@@ -137,42 +132,40 @@ const changeModal = (
 const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openModals, setOpenModals] = useState<boolean[]>();
-  const [allModals, setAllModals] =
-    useState<{ name: string; elm: ReactNode }[]>();
-  const openModal = (name: string) => {
-    if (!isOpen) {
-      setIsOpen(true);
-      let modal = findModal(name, modalConfig);
-      console.log("Found Modal::>>", modal);
-      changeModal(allModals, setOpenModals, modal);
-    }
-  };
+
   const closeModal = () => {
     if (isOpen) {
       setIsOpen(false);
-      changeModal(allModals, setOpenModals);
+      setOpenModals((s) => s?.map(() => false));
+    }
+  };
+
+  const allModals = useMemo<{ name: string; elm: ReactNode }[]>(() => {
+    if (Array.isArray(modalConfig))
+      return makeModals(modalConfig, openModals, closeModal, setOpenModals);
+    return makeModals([modalConfig], openModals, closeModal, setOpenModals);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalConfig]);
+  const openModal = (name: string) => {
+    if (!isOpen) {
+      setIsOpen(true);
+      const modal = findModal(name, modalConfig);
+      console.log("🚀 ~ file: useModal.tsx:147 ~ openModal ~ modal:", modal);
+      console.log(
+        "🚀 ~ file: useModal.tsx:147 ~ openModal ~ allModals:",
+        allModals
+      );
+      changeModal(allModals, setOpenModals, modal);
     }
   };
 
   useEffect(() => {
-    if (Array.isArray(modalConfig))
-      makeModals(
-        modalConfig,
-        openModals,
-        closeModal,
-        setOpenModals,
-        setAllModals
-      );
-    else
-      makeModals(
-        [modalConfig],
-        openModals,
-        closeModal,
-        setOpenModals,
-        setAllModals
-      );
-    return () => setIsOpen(false);
-  }, [modalConfig]);
+    console.log("changed OpenModals::>", openModals);
+  }, [openModals]);
+
+  useEffect(() => {
+    console.log("changed AllModals::>", allModals);
+  }, [allModals]);
 
   return {
     isOpen,
@@ -181,6 +174,7 @@ const useModal = (modalConfig: ModalConfigType | ModalConfigType[]) => {
     Modal: (
       <div className={`modal-wrapper ${isOpen ? "open" : "close"}-modal`}>
         {allModals?.map((m, i) => (
+          // eslint-disable-next-line react/jsx-key
           <div
             className={`modal-element-container ${
               openModals && openModals[i] ? "open" : "close"
